@@ -20,21 +20,21 @@ The proposed toolkit will focus on the following key functionalities:
 
 2. Stereovision-Based Depth Estimation:
 
-Implement stereo matching algorithms (e.g., Semi-Global Matching, Block Matching) to compute disparity maps.
+- Implement stereo matching algorithms (e.g., Semi-Global Matching, Block Matching) to compute disparity maps.
 
-Optimize the algorithms for real-time performance using OpenCV and ROS.
+- Optimize the algorithms for real-time performance using OpenCV and ROS.
 
 3. 3D Reconstruction:
 
-Generate point clouds from depth data.
+- Generate point clouds from depth data.
 
-Employ post-processing techniques such as noise filtering and mesh generation for accurate 3D models.
+- Employ post-processing techniques such as noise filtering and mesh generation for accurate 3D models.
 
 4. ROS Integration:
 
-Develop ROS nodes for sensor data acquisition, depth estimation, and 3D reconstruction.
+- Develop ROS nodes for sensor data acquisition, depth estimation, and 3D reconstruction.
 
-Publish reconstructed 3D data as ROS topics for use in downstream applications.
+- Publish reconstructed 3D data as ROS topics for use in downstream applications.
 
 
 ## Deliverables:
