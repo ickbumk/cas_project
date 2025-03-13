@@ -24,7 +24,7 @@ struct Face{
 
 int main() {
     //the initial file path, you could change to the destination you desire
-    std::ifstream file("/home/kos3755/projects/cas_project/dataset/Weisshai_Great_White_Shark/meshes/model.obj");    
+    std::ifstream file("dataset/Weisshai_Great_White_Shark/meshes/model.obj");    
     if (!file) {
         std::cerr << "Failed to open .obj file! \n" << std::endl;
         return 1;
