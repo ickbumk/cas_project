@@ -1,5 +1,6 @@
 # Ignore the .vscode folder
 .vscode/
+build/
 
 # Ignore executable files without an extension
 *~

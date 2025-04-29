@@ -6,12 +6,12 @@
 #include <array>
 #include <iostream>
 
-struct Face{
+/* struct Face{
     std::vector<int> ind_vertex;
     std::vector<int> ind_texture;
     std::vector<int> ind_normal;
 };
-
+ */
 class draw_face {
     public:
         draw_face(int width, int height) : width(width), height(height) {
