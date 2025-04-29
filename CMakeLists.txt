@@ -11,8 +11,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(Catch2)
 
-
-find_package(Catch2 3 REQUIRED)
+find_package(Catch2 CONFIG REQUIRED)
 
 add_subdirectory(utils)
 add_subdirectory(tests)
