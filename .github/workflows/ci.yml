@@ -1,31 +1,36 @@
-name: C++ CI
+name: Build and Test
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  build-and-test:
+  build_and_test:
     runs-on: ubuntu-22.04
+
+    defaults:
+      run:
+        shell: bash
 
     strategy:
       matrix:
-        build_type: [ Debug, Release ]
-
+        compiler: [g++]
+    
     steps:
-    - name: Checkout repository
+    - name: Update Packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -yq valgrind
+
+    - name: Checkout Repo
       uses: actions/checkout@v4
 
-    - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y cmake g++ ninja-build
-
-    - name: Configure CMake
-      run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-
     - name: Build
-      run: cmake --build build
+      run: ./autoconfig.sh RELEASE ${{matrix.compiler}} THREADS NOCUDA
 
-    - name: Run Tests
-      run: ctest --test-dir build --output-on-failure
+    - name: Test
+      run: |
+        ctest --test-dir ./build/tests --output-on-failure
+    
+    - name: Results
+      run: |
+        cat ./build/tests/Testing/Temporary/LastTest.log
