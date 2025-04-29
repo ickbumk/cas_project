@@ -12,6 +12,6 @@ fi
 
 cmake -S . -B ./build \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-    -DCatch2_ROOT=../Catch2-install \
+    -Catch2_DIR=../Catch2-install/lib/cmake/Catch2 \
     -DCMAKE_CXX_COMPILER=$CXX_COMPILER
 cmake --build ./build
