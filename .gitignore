@@ -6,4 +6,5 @@ build/
 *~
 *.out
 *.exe
+*.png
 

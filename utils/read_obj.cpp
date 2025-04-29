@@ -28,7 +28,7 @@ void read_file(const std::string & filename, std::vector<Vec3> & vertices, std::
             iss>> v.x >> v.y >> v.z;
             vertices.push_back(v); // add the vertex (1 vector) to vertices (list of vectors)
 
-            std::cout << "found vector "<< v.x << v.y << v.z <<"\n" ;
+            // std::cout << "found vector "<< v.x << v.y << v.z <<"\n" ;
         } else if (type == "f"){
             Face f;
             int index;
