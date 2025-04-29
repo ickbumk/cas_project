@@ -6,12 +6,13 @@ if [ ! -d ../Catch2-install ]; then
     rm -rf ../build/Catch2
     cmake -S ../Catch2 -B ../build/Catch2 \
         -DBUILD_TESTING=OFF \
+        -DCATCH2_INSTALL_CMAKE_FILES=ON \  # Enable CMake install files
         -DCMAKE_INSTALL_PREFIX=../Catch2-install/
     cmake --build ../build/Catch2 -j$(nproc) --target install
 fi
 
 cmake -S . -B ./build \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-    -Catch2_DIR=../Catch2-install/lib/cmake/Catch2 \
+    -DCatch2_ROOT=../Catch2-install \
     -DCMAKE_CXX_COMPILER=$CXX_COMPILER
-cmake --build ./build
+cmake --build ./build -j$(nproc)
