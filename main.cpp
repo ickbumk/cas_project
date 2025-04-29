@@ -21,10 +21,11 @@ int main(int argc, char* argv[]) {
     std::cout << "Loaded " << vertices.size() << " vertices with "<< vertex_normals.size() << " normals and " << faces.size() << " faces." << std::endl;
 
 
-    std::cout << "First face" << faces[0] << std::endl;
+    std::cout << "First face: " << faces[0].ind_vertex[0] << faces[0].ind_vertex[1]<< faces[0].ind_vertex[2] << std::endl;
 
     //Get a 2D zero array(grayscale)
     cv::Mat image = cv::Mat::zeros(512, 512, CV_8UC1); // 2D array of zeros (black image)
+    drawTriangle(image, vertices, faces); // Draw the triangles on the image
     writeImage(image, "../BlackImage.png");
 
 

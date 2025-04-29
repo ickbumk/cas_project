@@ -3,30 +3,35 @@
 #include <opencv4/opencv2/opencv.hpp>
 #include "read_obj.hpp"
 
-// Function to visualize a 2D image using OpenCV
-void writeImage(const cv::Mat& image, const std::string& windowName = "Image") {
+// Writes image to a file
+void writeImage(const cv::Mat& image, const std::string& filename = "Image.png") {
     if (image.empty()) {
         std::cerr << "Error: Provided image is empty." << std::endl;
         return;
     }
 
-    cv::imwrite(windowName, image);
+    cv::imwrite(filename, image);
 }
 
-void drawTriangle(const cv::Mat& image, std::vector<Vec3> vertices, const cv::Scalar& color) {
-    if (vertices.size() != 3) {
-        std::cerr << "Error: A triangle must have exactly 3 vertices." << std::endl;
-        return;
-    }
+// Draws triangles onto the image using vertex and face data
+void drawTriangle(cv::Mat& image, const std::vector<Vec3>& vertices, const std::vector<Face>& faces) {
+    for (const auto& face : faces) {
+        if (face.ind_vertex.size() < 3) continue;
 
-    // Convert Vec3 to cv::Point
-    std::vector<cv::Point> points;
-    for (const auto& vertex : vertices) {
-        points.emplace_back(static_cast<int>(vertex.x), static_cast<int>(vertex.y));
-    }
+        std::vector<cv::Point> points;
+        for (int i = 0; i < 3; ++i) {
+            int idx = face.ind_vertex[i] - 1;  // OBJ is 1-based
+            if (idx >= 0 && idx < vertices.size()) {
+                points.emplace_back(
+                    static_cast<int>(vertices[idx].x),
+                    static_cast<int>(vertices[idx].y)
+                );
+            }
+        }
 
-    // Draw the triangle
-    cv::fillConvexPoly(image, points, color);
+        if (points.size() == 3) {
+            cv::Scalar color(255);  // white for grayscale
+            cv::fillConvexPoly(image, points, color);
+        }
+    }
 }
-
-
