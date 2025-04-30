@@ -5,6 +5,8 @@
 #include <string>
 #include "read_obj.hpp"
 #include "visualize2d.hpp"
+#include "mathUtils.hpp"
+#include "cameraProperties.hpp"
 #include <opencv4/opencv2/opencv.hpp>
 //#include "occlusion_culling.hpp"
 
@@ -17,15 +19,30 @@ int main(int argc, char* argv[]) {
     std::vector<Face> faces; 
     std::vector<Vec3> vertex_normals;
     read_file(filename, vertices, vertex_normals, faces); // Pass faces as a non-const reference
+
         
     std::cout << "Loaded " << vertices.size() << " vertices with "<< vertex_normals.size() << " normals and " << faces.size() << " faces." << std::endl;
-
-
     std::cout << "First face: " << faces[0].ind_vertex[0] << faces[0].ind_vertex[1]<< faces[0].ind_vertex[2] << std::endl;
+    
+    std::vector<Vec3> normalizedVertices = normalizeVertex(vertices);
+
+    cv::Mat intrinsicMatrix = getSampleIntrinsicMatrix();
+    std::cout << "Intrinsic Matrix: \n" << intrinsicMatrix << std::endl;
+
+    cv::Vec3d eye(0, 3, 3);       // camera position
+    cv::Vec3d target(0, 0, 0);    // looking at origin
+    cv::Vec3d up(0, 1, 0);        // y-up
+
+    cv::Mat rtMatrix = getLookAtRT(eye, target, up);
+    std::cout << "Camera RT Matrix: \n" << rtMatrix << std::endl;    
+
+    cv::Mat projectionMatrix = intrinsicMatrix * rtMatrix;
+    std::cout << "Projection Matrix: \n" << projectionMatrix << std::endl;
+
 
     //Get a 2D zero array(grayscale)
     cv::Mat image = cv::Mat::zeros(512, 512, CV_8UC1); // 2D array of zeros (black image)
-    drawTriangle(image, vertices, faces); // Draw the triangles on the image
+    // drawTriangle(image, vertices, faces); // Draw the triangles on the image
     writeImage(image, "../BlackImage.png");
 
 
