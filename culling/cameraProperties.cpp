@@ -1,4 +1,5 @@
 #include <opencv2/opencv.hpp>
+#include "read_obj.hpp"
 
 cv::Mat getSampleIntrinsicMatrix() {
     double fx = 600.0;
@@ -38,3 +39,35 @@ cv::Mat getLookAtRT(const cv::Vec3d& eye, const cv::Vec3d& target, const cv::Vec
 
     return RT;
 }
+
+Vec3 getCameraPosition(const cv::Mat& RT) {
+    // Extract the rotation part (3x3) and translation part (3x1)
+    cv::Mat R = RT(cv::Rect(0, 0, 3, 3));
+    cv::Mat t = RT(cv::Rect(3, 0, 1, 3));
+
+    // Compute camera position: -R^T * t
+    cv::Mat cameraPos = -R.t() * t;
+
+    return Vec3{ static_cast<float>(cameraPos.at<double>(0)), static_cast<float>(cameraPos.at<double>(1)), static_cast<float>(cameraPos.at<double>(2)) };
+}
+
+
+cv::Mat projectPoints(const std::vector<Vec3>& points, const cv::Mat& projectionMatrix) {
+    cv::Mat projectedPoints(static_cast<int>(points.size()), 2, CV_32S); // N×2 int matrix
+
+    for (size_t i = 0; i < points.size(); ++i) {
+        const auto& point = points[i];
+        cv::Mat pointMat = (cv::Mat_<double>(4, 1) << point.x, point.y, point.z, 1.0);
+        cv::Mat projectedPoint = projectionMatrix * pointMat;
+
+        // Normalize homogeneous coordinates
+        double x = projectedPoint.at<double>(0) / projectedPoint.at<double>(2);
+        double y = projectedPoint.at<double>(1) / projectedPoint.at<double>(2);
+
+        projectedPoints.at<int>(static_cast<int>(i), 0) = static_cast<int>(x);
+        projectedPoints.at<int>(static_cast<int>(i), 1) = static_cast<int>(y);
+    }
+
+    return projectedPoints;
+}
+

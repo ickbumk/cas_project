@@ -4,3 +4,5 @@ target_include_directories(culling PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${OpenCV_I
 
 target_link_libraries(culling PUBLIC ${CMAKE_THREAD_LIBS_INIT} ${CMAKE_DL_LIBS} ${OpenCV_LIBS})
 
+target_link_libraries(culling PRIVATE utils)
+

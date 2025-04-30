@@ -2,6 +2,7 @@
 #include <iostream>
 #include <opencv4/opencv2/opencv.hpp>
 #include "read_obj.hpp"
+#include "mathUtils.hpp"
 
 // Writes image to a file
 void writeImage(const cv::Mat& image, const std::string& filename = "Image.png") {
@@ -14,24 +15,26 @@ void writeImage(const cv::Mat& image, const std::string& filename = "Image.png")
 }
 
 // Draws triangles onto the image using vertex and face data
-void drawTriangle(cv::Mat& image, const std::vector<Vec3>& vertices, const std::vector<Face>& faces) {
-    for (const auto& face : faces) {
-        if (face.ind_vertex.size() < 3) continue;
+void drawTriangle(cv::Mat& image, const std::vector<Triangle>& triangles,std::vector<double> facedistances, std::vector<int> sortedIndices){
+    if (image.empty()) {
+        std::cerr << "Error: Provided image is empty." << std::endl;
+        return;
+    }
+    
+    int i = 0;
+    double maxDistance = maxValue(facedistances);
+    double minDistance = minValue(facedistances);
+    for (const auto& triangle : triangles) {
 
-        std::vector<cv::Point> points;
-        for (int i = 0; i < 3; ++i) {
-            int idx = face.ind_vertex[i] - 1;  // OBJ is 1-based
-            if (idx >= 0 && idx < vertices.size()) {
-                points.emplace_back(
-                    static_cast<int>(vertices[idx].x),
-                    static_cast<int>(vertices[idx].y)
-                );
-            }
-        }
+        
+        // Convert Vec2Int to cv::Point
+        cv::Point a(triangle.a[0].u, triangle.a[0].v);
+        cv::Point b(triangle.b[0].u, triangle.b[0].v);
+        cv::Point c(triangle.c[0].u, triangle.c[0].v);
 
-        if (points.size() == 3) {
-            cv::Scalar color(255);  // white for grayscale
-            cv::fillConvexPoly(image, points, color);
-        }
+        cv::fillPoly(image, std::vector<std::vector<cv::Point>>{ { a, b, c } }, cv::Scalar((facedistances[sortedIndices[i]]-minDistance)/maxDistance*255)); // Fill the triangle with a color based on distance
+
+        i += 1;
     }
 }
+    
