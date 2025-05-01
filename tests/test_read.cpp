@@ -1,7 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include "read_obj.hpp"
 
-TEST_CASE("Just checking") {
+TEST_CASE("Checking OBJ file reading") {
     std::string filename = "../../dataset/Weisshai_Great_White_Shark/meshes/model.obj";
     std::vector<Vec3> vertices;
     std::vector<Face> faces;
